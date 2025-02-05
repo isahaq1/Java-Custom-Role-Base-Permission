@@ -19,7 +19,7 @@ public class JwtService {
 
     private String secretKey = null;
 
-    private final long JWT_EXPIRATION_MS = 7 * 24 * 60 * 60 * 1000;
+    private final long JWT_EXPIRATION_MS = 7 * 24 * 60 * 60 * 100;
 
     public String generateToken(User user) {
         Map<String, Object> claims

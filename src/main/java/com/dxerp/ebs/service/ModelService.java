@@ -3,10 +3,14 @@ package com.dxerp.ebs.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import com.dxerp.ebs.dto.ModelDTO;
 import com.dxerp.ebs.entity.Model;
+import com.dxerp.ebs.entity.User;
+
 import org.springframework.web.bind.annotation.*;
 import com.dxerp.ebs.repository.ModelRepository;
 import com.dxerp.ebs.util.ApiResponse;
@@ -54,6 +58,11 @@ public class ModelService {
         modelDTO.setStatus(model.getStatus());
         return modelDTO;
         
+    }
+
+      @PreAuthorize("hasPermission(null, 'models/list')")
+    public Page<Model> getAllModelList(int page, int size) {
+        return modelRepository.findAll(PageRequest.of(page, size));
     }
 
 

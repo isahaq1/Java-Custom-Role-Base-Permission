@@ -57,7 +57,7 @@ public class UserController {
         
     if(u == null){
         String token = "";
-        AuthResponse authResponse = new AuthResponse(token, "", "false","User Not Found");
+        AuthResponse authResponse = new AuthResponse(token, "", "false","Invalid Cridential");
         return ResponseEntity.ok(authResponse);
     }
        if(u.isEmailVerified()){
@@ -100,7 +100,7 @@ public class UserController {
 
     @GetMapping("/list")
     public Page<User> getUsers(
-            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
         return userService.getAuthUsers(page, size);

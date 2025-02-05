@@ -130,10 +130,12 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll();
     }
 
-    @PreAuthorize("hasPermission(null, 'users/list')")
+     @PreAuthorize("hasPermission(null, 'users/list')")
     public Page<User> getAuthUsers(int page, int size) {
         return userRepository.findAll(PageRequest.of(page, size));
     }
+
+    
 
     public UserDTO getUserById(Long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
@@ -143,6 +145,7 @@ public class UserServiceImpl implements UserService {
         userDTO.setEmail(user.getEmail());
         userDTO.setRoleId(user.getRole().getId());
         userDTO.setIsAdmin(user.ischeckAdmin());
+        // userDTO.setProfileImage(user.getProfileImage());
         return userDTO;
     }
 

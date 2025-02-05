@@ -13,12 +13,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Page;
 
 import com.dxerp.ebs.service.ModelService;
 import com.dxerp.ebs.dto.ModelDTO;
 import com.dxerp.ebs.entity.Model;
-
+import com.dxerp.ebs.entity.User;
 import com.dxerp.ebs.util.ApiResponse;
 
 @RestController
@@ -42,15 +44,16 @@ public class ModelController {
     public ResponseEntity<ApiResponse<List<Model>>> getModelsDropdown() {
      
         List<Model> models = modelService.getAllModels();
-        return ResponseEntity.ok(new ApiResponse<>(true, "Products fetched successfully", models));
+        return ResponseEntity.ok(new ApiResponse<>(true, "Models fetched successfully", models));
     }
 
     @GetMapping("/list")
-    @PreAuthorize("hasPermission(null, 'model/list')")
-    public ResponseEntity<ApiResponse<List<Model>>> getAllModels() {
-     
-        List<Model> models = modelService.getAllModels();
-        return ResponseEntity.ok(new ApiResponse<>(true, "Models fetched successfully", models));
+    @PreAuthorize("hasPermission(null, 'models/list')")
+    public Page<Model> getAllModels(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return modelService.getAllModelList(page, size);
     }
 
         @GetMapping("/{id}")

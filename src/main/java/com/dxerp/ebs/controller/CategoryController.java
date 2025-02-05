@@ -14,11 +14,16 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.dxerp.ebs.dto.CategoryDTO;
 import com.dxerp.ebs.entity.Category;
 import com.dxerp.ebs.service.CategoryService;
 import com.dxerp.ebs.util.ApiResponse;
+import com.dxerp.ebs.dto.PaginatedResponse;
 
 @RestController
 @RequestMapping("/api/categories")
@@ -45,11 +50,16 @@ public class CategoryController {
     }
 
     @GetMapping("/list")
-    @PreAuthorize("hasPermission(null, 'categories/list')")
-    public ResponseEntity<ApiResponse<List<Category>>> getAllCategories() {
+    // @PreAuthorize("hasPermission(null, 'categories/list')")
+    public ResponseEntity<ApiResponse<PaginatedResponse<Category>>> getAllCategories(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
      
-        List<Category> categories = categoryService.getAllCategories();
-        return ResponseEntity.ok(new ApiResponse<>(true, "Categories fetched successfully", categories));
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Category> categoryPage = categoryService.getAllCategoriesWithPagination(pageable);
+        
+        PaginatedResponse<Category> response = new PaginatedResponse<>(categoryPage.getContent(), categoryPage);
+        return ResponseEntity.ok(new ApiResponse<>(true, "Categories fetched successfully", response));
     }
 
         @GetMapping("/{id}")

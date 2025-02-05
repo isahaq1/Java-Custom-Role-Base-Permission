@@ -15,6 +15,9 @@ public class UserDTO {
     private Number roleId; 
     private Boolean isAdmin; 
     private MultipartFile profileImage;
+    private String pImage;
+
+    
 
 
     public Integer getId() {
@@ -40,5 +43,9 @@ public class UserDTO {
 
     public void setProfileImage(MultipartFile profileImage) {
         this.profileImage = profileImage;
+    }
+
+    public void  setpImage(String pImage){
+        this.pImage = pImage;
     }
 }

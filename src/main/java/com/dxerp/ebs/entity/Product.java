@@ -2,50 +2,62 @@ package com.dxerp.ebs.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "products")
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false)
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "model_id", nullable = false) // Foreign key
-    private Model model;
+    private String code;
 
     @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false) // Foreign key
+    @JoinColumn(name = "category_id")
     private Category category;
 
-    @Column(nullable = true)
+    @ManyToOne
+    @JoinColumn(name = "model_id")
+    private Model model;
+
+    private Double price;
+
     private String details;
 
-    @Column(nullable = true)
-    private Number price;
-
-    @Column(name = "product_image") // Stores the URL or file path
+    @Column(name = "product_image")
     private String productImage;
 
-    // Getters and Setters
-    public String getName() {
-        return name;
+    private String status;
+
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    @Column(name = "created_by")
+    private Long createdBy;
+
+    @PrePersist
+    public void onCreate() {
+        this.createdAt = LocalDateTime.now();
     }
 
-    public void setName(String name) {
-        this.name = name;
+    @PreUpdate
+    public void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
     }
 
-    public String getDetails() {
-        return details;
+    public void setModelId(Long modelId) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setModelId'");
     }
-
-    public void setDetails(String details) {
-        this.details = details;
-    }
-    
 }
