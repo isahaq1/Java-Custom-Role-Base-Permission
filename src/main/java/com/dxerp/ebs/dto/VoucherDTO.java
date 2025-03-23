@@ -13,6 +13,7 @@ import java.util.List;
 public class VoucherDTO {
     private Long id;
     private String type;
+    private String paymentType;
     private String voucherNo;
     private Long approveById;
     private Date approveDate;
@@ -32,16 +33,15 @@ public class VoucherDTO {
     private Integer status;
     private LocalDateTime updatedAt;
     private String voucherNumber;
-    private Long vendorId;
-    
-    // Add additional fields for displaying vendor information if needed
-    private String vendorName;
-    private String vendorCode;
     
     // Add validation annotations if required
-    public VoucherDTO(Long id, String voucherNumber) {
+    public VoucherDTO(Long id, String voucherNo, Date voucherDate, Double totalAmount, String type, Integer status) {
         this.id = id;
-        this.voucherNumber = voucherNumber;
+        this.voucherNo = voucherNo;
+        this.voucherDate = voucherDate;
+        this.totalAmount = totalAmount;
+        this.type = type;
+        this.status = status;
     }
 
     private List<VoucherDetailsDTO> voucherDetails;

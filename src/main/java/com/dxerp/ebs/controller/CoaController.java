@@ -1,8 +1,13 @@
 package com.dxerp.ebs.controller;
 
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.dxerp.ebs.dto.CoaDTO;
@@ -30,4 +35,17 @@ public class CoaController {
 public List<CoaDTO> listCoa() {
     return coaService.getAllCoaHeads();
 }
+
+@GetMapping("/payable-heads")
+public ResponseEntity<List<CoaDTO>> getPayableHeads() {
+    List<CoaDTO> payableHeads = coaService.getCoaByType("Liability");
+    return ResponseEntity.ok(payableHeads);
+}
+
+@GetMapping("/payment-methods")
+public ResponseEntity<List<CoaDTO>> getCoaByTypeAndKeyword() {
+    List<CoaDTO> payableHeads = coaService.getCoaByTypeAndKeyword("Asset","paymentMethod");
+    return ResponseEntity.ok(payableHeads);
+}
+
 }

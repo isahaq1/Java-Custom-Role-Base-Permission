@@ -1,14 +1,14 @@
 package com.dxerp.ebs.service;
 
+import com.dxerp.ebs.dto.LedgerDTO;
+import com.dxerp.ebs.dto.VoucherDTO;
+import com.dxerp.ebs.dto.VoucherDetailsDTO;
 import com.dxerp.ebs.entity.Voucher;
 import com.dxerp.ebs.entity.VoucherDetails;
 import com.dxerp.ebs.entity.Vendor;
 import com.dxerp.ebs.repository.VoucherRepository;
 import com.dxerp.ebs.repository.VendorRepository;
 import com.dxerp.ebs.repository.VoucherDetailsRepository;
-import com.dxerp.ebs.service.VoucherService;
-import com.dxerp.ebs.dto.VoucherDTO;
-import com.dxerp.ebs.dto.VoucherDetailsDTO;
 import com.dxerp.ebs.util.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,10 +16,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.time.LocalDateTime;
 
 @Service
 @Transactional
@@ -27,8 +27,14 @@ public class VoucherServiceImpl implements VoucherService {
 
     @Autowired
     private VoucherRepository voucherRepository;
+
     @Autowired
     private VoucherDetailsRepository voucherDetailsRepository;
+
+
+    @Autowired
+    private LedgerService ledgerService;
+
     @Override
     public Voucher getVoucherDetailsById(Long id) {
         Voucher voucher = voucherRepository.findById(id)
@@ -36,31 +42,23 @@ public class VoucherServiceImpl implements VoucherService {
         return voucher;
     }
 
-    @Autowired
-    private VendorRepository vendorRepository;
-
     @Override
     public ApiResponse<Voucher> createVoucher(VoucherDTO voucherDTO) {
-        try {
+          try {
+          
             Voucher voucher = new Voucher();
             mapDtoToEntity(voucherDTO, voucher);
             voucher.setCreatedAt(LocalDateTime.now());
             voucher.setStatus(1);
             voucher.setVoucherStatus(1); // Set initial status
-            
-            // Set vendor if vendorId is provided
-            if (voucherDTO.getVendorId() != null) {
-                Vendor vendor = vendorRepository.findById(voucherDTO.getVendorId())
-                    .orElseThrow(() -> new RuntimeException("Vendor not found with id: " + voucherDTO.getVendorId()));
-                voucher.setVendor(vendor);
-            }
-            
+
+   
+
             // Save voucher first to get the ID
             Voucher savedVoucher = voucherRepository.save(voucher);
 
             // Create voucher details with the saved voucher ID
             if (voucherDTO.getVoucherDetails() != null && !voucherDTO.getVoucherDetails().isEmpty()) {
-               
                 List<VoucherDetails> detailsList = new ArrayList<>();
                 Long slNo = 1L;
                 Double totalDebit = 0.0;
@@ -69,12 +67,11 @@ public class VoucherServiceImpl implements VoucherService {
                 for (VoucherDetailsDTO detailDTO : voucherDTO.getVoucherDetails()) {
                     VoucherDetails detail = new VoucherDetails();
                     mapDetailsDtoToEntity(detailDTO, detail);
-                   
-                    
+
                     // Set the voucher relationship and serial number
                     detail.setAccVoucherId(savedVoucher.getId());
                     detail.setSlNo(slNo++);
-                    
+
                     // Calculate totals
                     if (detail.getDebitAmount() != null) {
                         totalDebit += detail.getDebitAmount();
@@ -82,26 +79,39 @@ public class VoucherServiceImpl implements VoucherService {
                     if (detail.getCreditAmount() != null) {
                         totalCredit += detail.getCreditAmount();
                     }
-                    
+
                     detailsList.add(detail);
+
+                    // Create ledger entry for each voucher detail
+                    LedgerDTO ledgerDTO = new LedgerDTO();
+                    ledgerDTO.setVoucherNo(savedVoucher.getVoucherNo());
+                    ledgerDTO.setVoucherDate(savedVoucher.getVoucherDate());
+                    ledgerDTO.setCoaId(detail.getAccCoaId());
+                    ledgerDTO.setCoaCode(detail.getGlCode());
+                    ledgerDTO.setDebitAmount(detail.getDebitAmount());
+                    ledgerDTO.setCreditAmount(detail.getCreditAmount());
+                    ledgerDTO.setRefCoaCode(detail.getRefAccCoaId() != null ? detail.getRefAccCoaId().toString() : null);
+                    ledgerDTO.setRemarks(detail.getLedgerText());
+                    ledgerDTO.setCreatedBy(voucher.getCreateById());
+
+                    ledgerService.createLedger(ledgerDTO);
                 }
 
                 // Save all details at once
                 voucherDetailsRepository.saveAll(detailsList);
-                
+
                 // Update voucher with totals
                 savedVoucher.setTotalAmount(totalDebit); // or totalCredit, they should be equal
                 savedVoucher = voucherRepository.save(savedVoucher);
             }
-                System.out.print("detials  Coa "+voucherDTO.getVoucherDetails());
-            
+
             return new ApiResponse<>(true, "Voucher created successfully", savedVoucher);
         } catch (Exception e) {
             return new ApiResponse<>(false, "Error creating voucher: " + e.getMessage(), null);
         }
     }
 
-      private void mapDetailsDtoToEntity(VoucherDetailsDTO dto, VoucherDetails entity) {
+    private void mapDetailsDtoToEntity(VoucherDetailsDTO dto, VoucherDetails entity) {
         entity.setAccCoaId(dto.getAccCoaId());
         entity.setAccCostCenterId(dto.getAccCostCenterId());
         entity.setCreditAmountBk(dto.getCreditAmountBk());
@@ -124,8 +134,6 @@ public class VoucherServiceImpl implements VoucherService {
         entity.setDebitAmount(dto.getDebitAmount());
         entity.setCreditAmount(dto.getCreditAmount());
         entity.setDocDetailFile(dto.getDocDetailFile());
-        return;
-      
     }
 
     @Override
@@ -134,14 +142,16 @@ public class VoucherServiceImpl implements VoucherService {
     }
 
     @Override
+    public Page<VoucherDTO> getVoucherList(Pageable pageable) {
+        return voucherRepository.findVouchers(pageable);
+    }
+
+    @Override
     public Page<Voucher> getVouchersByCompany(Long companyId, Pageable pageable) {
         return voucherRepository.findByCompanyId(companyId, pageable);
     }
 
-    @Override
-    public Page<Voucher> getVouchersByVendor(Long vendorId, Pageable pageable) {
-        return voucherRepository.findByVendorId(vendorId, pageable);
-    }
+ 
 
     @Override
     public VoucherDTO getVoucherById(Long id) {
@@ -154,7 +164,7 @@ public class VoucherServiceImpl implements VoucherService {
     public Voucher updateVoucher(Long id, VoucherDTO voucherDTO) {
         Voucher existingVoucher = voucherRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Voucher not found with id: " + id));
-        
+
         mapDtoToEntity(voucherDTO, existingVoucher);
         existingVoucher.setUpdatedAt(LocalDateTime.now());
         return voucherRepository.save(existingVoucher);
@@ -182,12 +192,12 @@ public class VoucherServiceImpl implements VoucherService {
         try {
             Voucher voucher = voucherRepository.findById(id)
                     .orElseThrow(() -> new RuntimeException("Voucher not found with id: " + id));
-            
+
             voucher.setApproveById(approveById);
             voucher.setApproveDate(new Date());
             voucher.setVoucherStatus(2); // Approved status
             voucher.setUpdatedAt(LocalDateTime.now());
-            
+
             Voucher approvedVoucher = voucherRepository.save(voucher);
             return new ApiResponse<>(true, "Voucher approved successfully", approvedVoucher);
         } catch (Exception e) {
@@ -227,14 +237,6 @@ public class VoucherServiceImpl implements VoucherService {
         entity.setDescription(dto.getDescription());
         entity.setVoucherNumber(dto.getVoucherNumber());
 
-        if (dto.getVendorId() != null) {
-            Vendor vendor = vendorRepository.findById(dto.getVendorId())
-                    .orElseThrow(() -> new RuntimeException("Vendor not found with id: " + dto.getVendorId()));
-            entity.setVendor(vendor);
-        }else{
-            entity.setVendor(null);
-        }
-        return;
     }
 
     private VoucherDTO mapEntityToDto(Voucher entity) {
@@ -260,12 +262,7 @@ public class VoucherServiceImpl implements VoucherService {
         dto.setStatus(entity.getStatus());
         dto.setUpdatedAt(entity.getUpdatedAt());
         dto.setVoucherNumber(entity.getVoucherNumber());
-        if (entity.getVendor() != null) {
-            dto.setVendorId(entity.getVendor().getId().longValue());
-            dto.setVendorName(entity.getVendor().getName());
-          
-        }
 
         return dto;
     }
-} 
+}

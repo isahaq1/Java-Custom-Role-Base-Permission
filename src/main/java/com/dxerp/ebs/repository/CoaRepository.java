@@ -10,6 +10,7 @@ import com.dxerp.ebs.dto.CoaDTO;
 
 import java.sql.CallableStatement;
 import java.sql.Types;
+import java.util.Collection;
 import java.util.List;
 
 @Repository
@@ -81,4 +82,43 @@ public class CoaRepository {
         });
            
         }
+
+
+
+    @SuppressWarnings("deprecation")
+    public Collection<CoaDTO> findAllByCoaType(String coaType) {
+        String sql = "SELECT * FROM ACC_COA WHERE COA_TYPE = ?";
+        return jdbcTemplate.query(sql, new Object[]{coaType}, (rs, rowNum) -> {
+            CoaDTO coaDTO = new CoaDTO();
+            coaDTO.setId(rs.getLong("id"));
+            coaDTO.setCoaName(rs.getString("COA_NAME"));
+            coaDTO.setCoaType(rs.getString("COA_TYPE"));
+            coaDTO.setGroupHead(rs.getInt("is_group_head"));
+            coaDTO.setKeyWord(rs.getString("key_word"));
+            coaDTO.setParentId(rs.getLong("parent_acc_coa_id"));
+            coaDTO.setCode(rs.getString("code"));
+            coaDTO.setGroupCode(rs.getString("group_code"));
+            coaDTO.setGroupName(rs.getString("group_name"));
+            return coaDTO;
+        });
+    }
+    
+    @SuppressWarnings("deprecation")
+    public Collection<CoaDTO> findAllByCoaTypeAndKeyword(String coaType, String keyword) {
+        String sql = "SELECT * FROM ACC_COA WHERE COA_TYPE = ? AND key_word = ?";
+        return jdbcTemplate.query(sql, new Object[]{coaType, keyword}, (rs, rowNum) -> {
+            CoaDTO coaDTO = new CoaDTO();
+            coaDTO.setId(rs.getLong("id"));
+            coaDTO.setCoaName(rs.getString("COA_NAME"));
+            coaDTO.setCoaType(rs.getString("COA_TYPE"));
+            coaDTO.setGroupHead(rs.getInt("is_group_head"));
+            coaDTO.setKeyWord(rs.getString("key_word"));
+            coaDTO.setParentId(rs.getLong("parent_acc_coa_id"));
+            coaDTO.setCode(rs.getString("code"));
+            coaDTO.setGroupCode(rs.getString("group_code"));
+            coaDTO.setGroupName(rs.getString("group_name"));
+            return coaDTO;
+        });
+    }
+
 }

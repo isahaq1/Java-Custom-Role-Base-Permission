@@ -1,5 +1,6 @@
 package com.dxerp.ebs.service;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,5 +26,38 @@ public class CoaService {
 
         return coaRepository.findAll();
 
+    }
+    public List<CoaDTO> getCoaByType(String coaType) {
+        
+        return coaRepository.findAllByCoaType(coaType)
+                .stream()
+                .map(coa -> {
+                    CoaDTO dto = new CoaDTO();
+                    dto.setId(coa.getId());
+                    dto.setCoaName(coa.getCoaName());
+                    dto.setCoaType(coa.getCoaType());
+                    dto.setGroupCode(coa.getGroupCode());
+                    dto.setGroupName(coa.getGroupName());
+                    // Set other necessary fields
+                    return dto;
+                })
+                .collect(Collectors.toList());
+    }
+
+    public List<CoaDTO> getCoaByTypeAndKeyword(String coaType,String Keyword) {
+        
+        return coaRepository.findAllByCoaTypeAndKeyword(coaType,Keyword)
+                .stream()
+                .map(coa -> {
+                    CoaDTO dto = new CoaDTO();
+                    dto.setId(coa.getId());
+                    dto.setCoaName(coa.getCoaName());
+                    dto.setCoaType(coa.getCoaType());
+                    dto.setGroupCode(coa.getGroupCode());
+                    dto.setGroupName(coa.getGroupName());
+                    // Set other necessary fields
+                    return dto;
+                })
+                .collect(Collectors.toList());
     }
 }

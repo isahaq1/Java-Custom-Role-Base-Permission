@@ -15,6 +15,8 @@ public interface VoucherService {
     
     // Get all vouchers with pagination
     Page<Voucher> getAllVouchers(Pageable pageable);
+    Page<VoucherDTO> getVoucherList(Pageable pageable);
+    
     
     // Get vouchers by company with pagination
     Page<Voucher> getVouchersByCompany(Long companyId, Pageable pageable);

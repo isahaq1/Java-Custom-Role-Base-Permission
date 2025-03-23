@@ -23,6 +23,9 @@ public class Voucher {
     @Column(name = "TYPE", length = 50)
     private String type;
 
+    @Column(name = "PAYMENT_TYPE", length = 50)
+    private String paymentType;
+
     @Column(name = "VOUCHER_NO", length = 50)
     private String voucherNo;
 
@@ -84,9 +87,6 @@ public class Voucher {
     @Column(name = "VOUCHER_NUMBER", length = 255)
     private String voucherNumber;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "VENDOR_ID")
-    private Vendor vendor;
 
     @OneToMany(mappedBy = "voucher", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<VoucherDetails> voucherDetails = new ArrayList<>();

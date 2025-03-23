@@ -26,19 +26,20 @@ public class VoucherController {
     private VoucherService voucherService;
 
     @PostMapping("/create")
-    @PreAuthorize("hasPermission(null, 'vouchers/create')")
+    // @PreAuthorize("hasPermission(null, 'vouchers/create')")
     public ResponseEntity<ApiResponse<Voucher>> createVoucher(@RequestBody VoucherDTO voucherDTO) {
+        
         return ResponseEntity.ok(voucherService.createVoucher(voucherDTO));
     }
 
     @GetMapping("/list")
     @PreAuthorize("hasPermission(null, 'vouchers/list')")
-    public ResponseEntity<ApiResponse<PaginatedResponse<Voucher>>> getAllVouchers(
+    public ResponseEntity<ApiResponse<PaginatedResponse<VoucherDTO>>> getAllVouchers(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<Voucher> voucherPage = voucherService.getAllVouchers(pageable);
-        PaginatedResponse<Voucher> response = new PaginatedResponse<>(voucherPage.getContent(), voucherPage);
+        Page<VoucherDTO> voucherPage = voucherService.getVoucherList(pageable);
+        PaginatedResponse<VoucherDTO> response = new PaginatedResponse<>(voucherPage.getContent(), voucherPage);
         return ResponseEntity.ok(new ApiResponse<>(true, "Vouchers fetched successfully", response));
     }
 
