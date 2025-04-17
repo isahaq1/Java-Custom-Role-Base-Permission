@@ -10,16 +10,39 @@ import com.dxerp.ebs.repository.VoucherRepository;
 import com.dxerp.ebs.repository.VendorRepository;
 import com.dxerp.ebs.repository.VoucherDetailsRepository;
 import com.dxerp.ebs.util.ApiResponse;
+
+
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ResourceUtils;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import org.springframework.util.ResourceUtils;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 @Service
 @Transactional
@@ -56,6 +79,7 @@ public class VoucherServiceImpl implements VoucherService {
 
             // Save voucher first to get the ID
             Voucher savedVoucher = voucherRepository.save(voucher);
+            
 
             // Create voucher details with the saved voucher ID
             if (voucherDTO.getVoucherDetails() != null && !voucherDTO.getVoucherDetails().isEmpty()) {
@@ -183,7 +207,7 @@ public class VoucherServiceImpl implements VoucherService {
     }
 
     @Override
-    public List<Voucher> getVouchersByDateRange(Date startDate, Date endDate) {
+    public List<VoucherDTO> getVouchersByDateRange(Date startDate, Date endDate) {
         return voucherRepository.findByVoucherDateBetween(startDate, endDate);
     }
 
@@ -264,5 +288,37 @@ public class VoucherServiceImpl implements VoucherService {
         dto.setVoucherNumber(entity.getVoucherNumber());
 
         return dto;
+    }
+
+    public String exportVoucherReport(Date startDate, Date endDate,String format) throws FileNotFoundException, JRException {
+    
+        // Validate input parameters
+        if (startDate == null || endDate == null || format == null || format.isEmpty()) {
+            throw new IllegalArgumentException("Invalid input parameters for exporting voucher report.");
+        }
+    
+        // Fetch vouchers within the date range
+        List<VoucherDTO> vouchers = voucherRepository.findByVoucherDateBetween(startDate, endDate);
+    
+        String path = "C:\\Users\\Ishaq\\Desktop\\Reports\\vouchers";
+         File file = ResourceUtils.getFile("classpath:voucherReport.jrxml");
+         JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
+         JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(vouchers);
+         Map<String, Object> parameters = new HashMap<>();
+       JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+         if (format.equalsIgnoreCase("html")) {
+             JasperExportManager.exportReportToHtmlFile(jasperPrint, path + "\\voucher-reports.html");
+         } else if (format.equalsIgnoreCase("pdf")) {
+      
+              JasperExportManager.exportReportToPdfFile(jasperPrint, path + "\\voucher-reports.pdf");
+         }
+
+         return "Report generated successfully!";
+    }
+
+    @Override
+    public Page<Voucher> getVouchersByVendor(Long vendorId, Pageable pageable) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getVouchersByVendor'");
     }
 }

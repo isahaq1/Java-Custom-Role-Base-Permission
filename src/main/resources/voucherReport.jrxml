@@ -1,0 +1,205 @@
+
+<!-- Created with Jaspersoft Studio version 7.0.2.final using JasperReports Library version 7.0.2-31532122640f516c6d17238ae0e41a08113d5ac0  -->
+<jasperReport name="voucherReport1" language="java" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4eedbb89-b4f6-4469-9ab6-f642a1688cf7">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="ebs"/>
+	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50.0" bold="false" pdfFontName="Times-Bold"/>
+	<style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="18.0" bold="false" pdfFontName="Times-Roman"/>
+	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14.0" bold="true"/>
+	<style name="Detail" mode="Transparent" fontName="Times New Roman"/>
+	<style name="Row" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman">
+		<conditionalStyle mode="Opaque" backcolor="#EEEFF0">
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+		</conditionalStyle>
+	</style>
+	<style name="Table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+			<topPen lineWidth="1.0" lineColor="#000000"/>
+			<leftPen lineWidth="1.0" lineColor="#000000"/>
+			<bottomPen lineWidth="1.0" lineColor="#000000"/>
+			<rightPen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_TH" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_CH" mode="Opaque" backcolor="#CACED0">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+		<conditionalStyle backcolor="#D8D8D8">
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+		</conditionalStyle>
+	</style>
+	<dataset name="tableDataset" uuid="f13e6d36-5148-4ecc-bbe3-3035def80980">
+		<query language="sql"><![CDATA[]]></query>
+	</dataset>
+
+	<field name="voucherNo" class="java.lang.String">
+		
+	</field>
+	<field name="type" class="java.lang.String">
+		
+	</field>
+	<field name="amount" class="java.lang.Double">
+	
+	</field>
+	<field name="voucherStatus" class="java.math.BigDecimal">
+		
+	</field>
+	<field name="totalAmount" class="java.lang.Double">
+		
+	</field>
+	<field name="voucherDate" class="java.sql.Date">
+		
+	</field>
+	<field name="description" class="java.lang.String">
+		
+	</field>
+	<field name="narration" class="java.lang.String">
+		
+	</field>
+	<field name="voucherNumber" class="java.lang.String">
+		
+	</field>
+	<field name="status" class="java.lang.Integer">
+		
+	</field>
+	<title height="87" splitType="Stretch">
+		<element kind="line" uuid="806ce5df-1219-4876-ae0c-ca7405b1f246" x="0" y="80" width="556" height="1">
+			<property name="local_mesure_unitheight" value="pixel"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="staticText" uuid="e622555d-198b-4ccd-a4a1-c59c53304058" x="210" y="0" width="210" height="25" fontSize="19.0" bold="true">
+			<text><![CDATA[DX  Group]]></text>
+			<property name="local_mesure_unitheight" value="pixel"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="staticText" uuid="b8cc42fd-b569-497d-834d-7e854040ad18" x="220" y="50" width="205" height="15" bold="true">
+			<text><![CDATA[From-2025-02-01  to - 2025-03-30]]></text>
+		</element>
+		<element kind="staticText" uuid="b96f7183-44f8-43ad-ba60-43d8fbf50b6e" x="220" y="30" width="240" height="20" bold="true">
+			<text><![CDATA[Voucher Report]]></text>
+		</element>
+	</title>
+	<columnHeader height="20">
+		<element kind="staticText" uuid="dfcb50ce-5b54-4486-8e9c-4f03c7f59603" positionType="Float" x="0" y="0" width="55" height="20" forecolor="#000000" fontName="Arial" fontSize="12.0" bold="true" style="Column header">
+			<text><![CDATA[voucherNo]]></text>
+			<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a83b8a25-bc80-425f-95e5-928d18b65fd4"/>
+		</element>
+		<element kind="staticText" uuid="4ad6f1dc-b2cc-4d99-bf96-875674a1285e" positionType="Float" x="55" y="0" width="55" height="20" forecolor="#000000" fontName="Arial" fontSize="12.0" bold="true" style="Column header">
+			<text><![CDATA[type]]></text>
+			<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f28ed448-61c9-41c2-874f-1a44e202871b"/>
+		</element>
+		<element kind="staticText" uuid="084c8aff-c553-4b0b-a020-e6b13f01fb0f" positionType="Float" x="110" y="0" width="55" height="20" forecolor="#000000" fontName="Arial" fontSize="12.0" bold="true" style="Column header">
+			<text><![CDATA[amount]]></text>
+			<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="491765ae-c439-40df-bd0c-e9eb68224ca0"/>
+		</element>
+		<element kind="staticText" uuid="bea177f3-963b-4f06-8bf8-5ec0f5ceff57" positionType="Float" x="165" y="0" width="55" height="20" forecolor="#000000" fontName="Arial" fontSize="12.0" bold="true" style="Column header">
+			<text><![CDATA[voucherStatus]]></text>
+			<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="72ee199a-8611-41f6-8b5d-857f9842d873"/>
+		</element>
+		<element kind="staticText" uuid="3e398120-2f4e-44af-b699-4dd6fad03dd8" positionType="Float" x="220" y="0" width="55" height="20" forecolor="#000000" fontName="Arial" fontSize="12.0" bold="true" style="Column header">
+			<text><![CDATA[totalAmount]]></text>
+			<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="760757d3-c554-43fa-8b3a-213e11ed531e"/>
+		</element>
+		<element kind="staticText" uuid="baa540b7-8589-4c5b-99ce-63cc078b0afb" positionType="Float" x="275" y="0" width="55" height="20" forecolor="#000000" fontName="Arial" fontSize="12.0" bold="true" style="Column header">
+			<text><![CDATA[voucherDate]]></text>
+			<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="50ddf913-e28d-4166-bc23-1f428bf93e7f"/>
+		</element>
+		<element kind="staticText" uuid="a4c89762-6c45-4d80-bc19-19b4c3fbf0fe" positionType="Float" x="330" y="0" width="55" height="20" forecolor="#000000" fontName="Arial" fontSize="12.0" bold="true" style="Column header">
+			<text><![CDATA[description]]></text>
+			<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9f783c66-7265-4e6c-8bc8-6e2f889ec199"/>
+		</element>
+		<element kind="staticText" uuid="82fa4128-2350-40a6-be8f-86a848fd1c22" positionType="Float" x="385" y="0" width="55" height="20" forecolor="#000000" fontName="Arial" fontSize="12.0" bold="true" style="Column header">
+			<text><![CDATA[narration]]></text>
+			<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="b57b85e6-5c0d-48f6-b4b9-4681b3d65d31"/>
+		</element>
+		<element kind="staticText" uuid="306921f5-156c-46cc-bb79-689bc4e4a897" positionType="Float" x="440" y="0" width="55" height="20" forecolor="#000000" fontName="Arial" fontSize="12.0" bold="true" style="Column header">
+			<text><![CDATA[voucherNumber]]></text>
+			<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="330db7ea-384f-4b73-9741-66af52cf629f"/>
+		</element>
+		<element kind="staticText" uuid="3771e8ea-cb71-41e9-b9df-14863043c256" positionType="Float" x="495" y="0" width="55" height="20" forecolor="#000000" fontName="Arial" fontSize="12.0" bold="true" style="Column header">
+			<text><![CDATA[status]]></text>
+			<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a3dcde86-5ee2-46aa-b96a-893fb040ca04"/>
+		</element>
+	</columnHeader>
+	<detail>
+		<band height="20">
+			<element kind="textField" uuid="6a50884e-f974-4251-89f5-3676a356d36a" positionType="Float" x="0" y="0" width="55" height="20" fontName="Arial" fontSize="12.0" textAdjust="StretchHeight" blankWhenNull="true" bold="false" style="Detail">
+				<expression><![CDATA[$F{voucherNo}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a83b8a25-bc80-425f-95e5-928d18b65fd4"/>
+			</element>
+			<element kind="textField" uuid="9f0f791a-4136-4f86-aa6e-fb282c441bdc" positionType="Float" x="55" y="0" width="55" height="20" fontName="Arial" fontSize="12.0" textAdjust="StretchHeight" blankWhenNull="true" bold="false" style="Detail">
+				<expression><![CDATA[$F{type}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f28ed448-61c9-41c2-874f-1a44e202871b"/>
+			</element>
+			<element kind="textField" uuid="dc08343c-5b06-4458-9d12-112f2a71c73a" positionType="Float" x="110" y="0" width="55" height="20" fontName="Arial" fontSize="12.0" textAdjust="StretchHeight" blankWhenNull="true" bold="false" style="Detail">
+				<expression><![CDATA[$F{amount}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="491765ae-c439-40df-bd0c-e9eb68224ca0"/>
+			</element>
+			<element kind="textField" uuid="c6636ecf-811a-4a14-8d5e-a43d688019e8" positionType="Float" x="165" y="0" width="55" height="20" fontName="Arial" fontSize="12.0" textAdjust="StretchHeight" blankWhenNull="true" bold="false" style="Detail">
+				<expression><![CDATA[$F{voucherStatus}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="72ee199a-8611-41f6-8b5d-857f9842d873"/>
+			</element>
+			<element kind="textField" uuid="414412a1-ef0c-4d8c-a3ae-9d85f0fe7d02" positionType="Float" x="220" y="0" width="55" height="20" fontName="Arial" fontSize="12.0" textAdjust="StretchHeight" blankWhenNull="true" bold="false" style="Detail">
+				<expression><![CDATA[$F{totalAmount}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="760757d3-c554-43fa-8b3a-213e11ed531e"/>
+			</element>
+			<element kind="textField" uuid="7d57eb85-470d-47f6-8de7-cf82677a4f5c" positionType="Float" x="275" y="0" width="55" height="20" fontName="Arial" fontSize="12.0" textAdjust="StretchHeight" blankWhenNull="true" bold="false" style="Detail">
+				<expression><![CDATA[$F{voucherDate}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="50ddf913-e28d-4166-bc23-1f428bf93e7f"/>
+			</element>
+			<element kind="textField" uuid="8737ee76-9a45-43fa-9358-0e388de1f49e" positionType="Float" x="330" y="0" width="55" height="20" fontName="Arial" fontSize="12.0" textAdjust="StretchHeight" blankWhenNull="true" bold="false" style="Detail">
+				<expression><![CDATA[$F{description}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9f783c66-7265-4e6c-8bc8-6e2f889ec199"/>
+			</element>
+			<element kind="textField" uuid="803612e0-2b46-4431-af74-d27235872865" positionType="Float" x="385" y="0" width="55" height="20" fontName="Arial" fontSize="12.0" textAdjust="StretchHeight" blankWhenNull="true" bold="false" style="Detail">
+				<expression><![CDATA[$F{narration}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="b57b85e6-5c0d-48f6-b4b9-4681b3d65d31"/>
+			</element>
+			<element kind="textField" uuid="4cd4eb83-33ad-4d3e-b9e3-a7d202c0339d" positionType="Float" x="440" y="0" width="55" height="20" fontName="Arial" fontSize="12.0" textAdjust="StretchHeight" blankWhenNull="true" bold="false" style="Detail">
+				<expression><![CDATA[$F{voucherNumber}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="330db7ea-384f-4b73-9741-66af52cf629f"/>
+			</element>
+			<element kind="textField" uuid="c1946e33-96cb-4cfe-82fc-ddb49c9b38b2" positionType="Float" x="495" y="0" width="55" height="20" fontName="Arial" fontSize="12.0" textAdjust="StretchHeight" blankWhenNull="true" bold="false" style="Detail">
+				<expression><![CDATA[$F{status}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a3dcde86-5ee2-46aa-b96a-893fb040ca04"/>
+			</element>
+		</band>
+	</detail>
+	<lastPageFooter height="177">
+		<element kind="staticText" uuid="1a0d7088-5af7-4865-8be1-41ec5f51fb36" positionType="Float" x="-1" y="30" width="261" height="101">
+			<text><![CDATA[Your notes here]]></text>
+			<box>
+				<topPen lineWidth="1.1" lineStyle="Dashed"/>
+				<leftPen lineWidth="1.1" lineStyle="Dashed"/>
+				<bottomPen lineWidth="1.1" lineStyle="Dashed"/>
+				<rightPen lineWidth="1.1" lineStyle="Dashed"/>
+			</box>
+		</element>
+		<element kind="staticText" uuid="36aa233d-4305-48e6-974a-1bbf89bb3c8f" positionType="Float" mode="Opaque" x="0" y="147" width="556" height="30" backcolor="#E6E8E9" fontName="Serif" fontSize="9.0" italic="true" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[THANKYOU FOR YOUR BUSINESS]]></text>
+		</element>
+	</lastPageFooter>
+</jasperReport>

@@ -5,6 +5,9 @@ import com.dxerp.ebs.entity.Voucher;
 import com.dxerp.ebs.entity.VoucherDetails;
 import com.dxerp.ebs.service.VoucherService;
 import com.dxerp.ebs.util.ApiResponse;
+
+import net.sf.jasperreports.engine.JRException;
+
 import com.dxerp.ebs.dto.PaginatedResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.FileNotFoundException;
 import java.util.Date;
 import java.util.List;
 
@@ -99,10 +103,10 @@ public class VoucherController {
 
     @GetMapping("/date-range")
     @PreAuthorize("hasPermission(null, 'vouchers/list')")
-    public ResponseEntity<ApiResponse<List<Voucher>>> getVouchersByDateRange(
+    public ResponseEntity<ApiResponse<List<VoucherDTO>>> getVouchersByDateRange(
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate) {
-        List<Voucher> vouchers = voucherService.getVouchersByDateRange(startDate, endDate);
+        List<VoucherDTO> vouchers = voucherService.getVouchersByDateRange(startDate, endDate);
         return ResponseEntity.ok(new ApiResponse<>(true, "Date range vouchers fetched successfully", vouchers));
     }
 
@@ -133,6 +137,25 @@ public class VoucherController {
     public ResponseEntity<ApiResponse<Long>> getVoucherCountByStatus(@PathVariable Integer status) {
         Long count = voucherService.getVoucherCountByStatus(status);
         return ResponseEntity.ok(new ApiResponse<>(true, "Status count fetched successfully", count));
+    }
+
+    @GetMapping("/report/date-range")
+    // @PreAuthorize("hasPermission(null, 'vouchers/report')")
+    public ResponseEntity<ApiResponse<List<VoucherDTO>>> getVoucherReportByDateRange(
+        @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
+        @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate) {
+        List<VoucherDTO> vouchers = voucherService.getVouchersByDateRange(startDate, endDate);
+        return ResponseEntity.ok(new ApiResponse<>(true, "Date range vouchers fetched successfully", vouchers));
+    }
+
+    @GetMapping("/voucherReport/export")
+    // @PreAuthorize("hasPermission(null, 'vouchers/report')")
+    public ResponseEntity<ApiResponse<String>> exportVoucherReport(
+        @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
+        @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate,
+        @RequestParam String format) throws FileNotFoundException, JRException {
+        String filePath = voucherService.exportVoucherReport(startDate, endDate, format);
+        return ResponseEntity.ok(new ApiResponse<>(true, "Report exported successfully", filePath));
     }
 
    

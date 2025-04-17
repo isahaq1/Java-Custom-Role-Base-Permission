@@ -35,13 +35,14 @@ public class VoucherDTO {
     private String voucherNumber;
     
     // Add validation annotations if required
-    public VoucherDTO(Long id, String voucherNo, Date voucherDate, Double totalAmount, String type, Integer status) {
+    public VoucherDTO(Long id, String voucherNo, Date voucherDate, Double totalAmount, String type, Integer status, String narration) {
         this.id = id;
         this.voucherNo = voucherNo;
         this.voucherDate = voucherDate;
         this.totalAmount = totalAmount;
         this.type = type;
         this.status = status;
+        this.narration = narration;
     }
 
     private List<VoucherDetailsDTO> voucherDetails;

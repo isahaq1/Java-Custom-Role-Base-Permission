@@ -4,8 +4,13 @@ import com.dxerp.ebs.entity.Voucher;
 import com.dxerp.ebs.entity.VoucherDetails;
 import com.dxerp.ebs.dto.VoucherDTO;
 import com.dxerp.ebs.util.ApiResponse;
+
+import net.sf.jasperreports.engine.JRException;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
+import java.io.FileNotFoundException;
 import java.util.Date;
 import java.util.List;
 
@@ -37,7 +42,7 @@ public interface VoucherService {
     List<Voucher> getVouchersByStatus(Integer status);
     
     // Get vouchers by date range
-    List<Voucher> getVouchersByDateRange(Date startDate, Date endDate);
+    List<VoucherDTO> getVouchersByDateRange(Date startDate, Date endDate);
     
     // Approve voucher
     ApiResponse<Voucher> approveVoucher(Long id, Long approveById);
@@ -52,6 +57,8 @@ public interface VoucherService {
     
     // Get voucher details by ID
     Voucher getVoucherDetailsById(Long id);
+
+    String exportVoucherReport(Date startDate, Date endDate, String format) throws FileNotFoundException, JRException;
 
  
 }
